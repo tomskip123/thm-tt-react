@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import logo from './logo.svg';
 import './App.scss';
 import axios from 'axios';
 import { Formik } from 'formik';
@@ -11,48 +10,36 @@ function App() {
 
   useEffect(() => {
     (async () => {
-
       const res = await axios.get('/tasks');
       setTasks(res.data);
-
-      console.log(tasks)
-
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-
-  async function addTask(form: any) {
-    console.log(form);
-
-    const res = await axios.post('/tasks', form);
-
-    console.log(res.data)
-
-  }
 
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Tasks</h1>
+
+        <ul className='task-list'>
+          {tasks && tasks.map((task: any) => (
+            <li className="task-list-item" key={task._id}>{task.task}</li>
+          ))}
+        </ul>
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ task: '', }}
           validate={values => {
             const errors: any = {};
-            if (!values.email) {
-              errors.email = 'Required';
-            } else if (
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-            ) {
-              errors.email = 'Invalid email address';
+            if (!values.task) {
+              errors.task = 'Task required';
             }
             return errors;
           }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 400);
+          onSubmit={async (values) => {
+            const res = await axios.post('/tasks', values);
+
+            setTasks([...tasks, res.data]);
           }}
         >
           {({
@@ -67,14 +54,14 @@ function App() {
           }) => (
             <form className='task-form' onSubmit={handleSubmit}>
               <input
-                type="email"
-                name="email"
+                type="task"
+                name="task"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                value={values.email}
+                value={values.task}
               />
               <p className='error-message'>
-                {errors.email && touched.email && errors.email}
+                {errors.task && touched.task && errors.task}
               </p>
 
               <button className="submit-button" type="submit" disabled={isSubmitting}>
