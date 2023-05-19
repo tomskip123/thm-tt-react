@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import './App.scss';
 import axios from 'axios';
 import { Formik } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 
 function App() {
@@ -10,12 +12,20 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get('/tasks');
-      setTasks(res.data);
+      await getTasks();
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  async function getTasks() {
+    const res = await axios.get('/tasks');
+    setTasks(res.data);
+  }
+
+  async function deleteTask(id: string) {
+    await axios.delete(`/tasks/${id}`);
+    await getTasks();
+  }
 
   return (
     <div className="App">
@@ -24,7 +34,15 @@ function App() {
 
         <ul className='task-list'>
           {tasks && tasks.map((task: any) => (
-            <li className="task-list-item" key={task._id}>{task.task}</li>
+            <li className="task-list-item" key={task._id}>
+              <p>{task.task}</p>
+
+              <button className="task-list-item-delete-button"
+                onClick={() => deleteTask(task._id)}
+              >
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            </li>
           ))}
         </ul>
         <Formik

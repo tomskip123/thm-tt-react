@@ -84,7 +84,7 @@ input {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
@@ -94,5 +94,16 @@ input {
     color: whitesmoke;
     font-weight: bold;
     cursor: pointer;
+
+
+    .task-list-item-delete-button {
+      border: none;
+      border-radius: 5px;
+      padding: 5px;
+      background-color: #ff0000;
+      color: whitesmoke;
+      font-weight: bold;
+      cursor: pointer;
+    }
   }
 }
