@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
-import './App.scss';
+"use client"
+
+import React, { useEffect, useState } from 'react';
+import './page.scss';
 import axios from 'axios';
 import { Formik } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +11,8 @@ import { faTrash, faPencil } from '@fortawesome/free-solid-svg-icons'
 function App() {
   const [tasks, setTasks] = React.useState<any>(null);
   const [editing, setEditing] = React.useState<any>(null);
+
+  // const [supabaseClient] = useState(() => createBrowserSupabaseClient())
 
   useEffect(() => {
     console.log(editing)
@@ -22,12 +26,12 @@ function App() {
   }, [])
 
   async function getTasks() {
-    const res = await axios.get('/tasks');
+    const res = await axios.get('/api/tasks');
     setTasks(res.data);
   }
 
   async function deleteTask(id: string) {
-    await axios.delete(`/tasks/${id}`);
+    await axios.delete(`/api/tasks/${id}`);
     await getTasks();
   }
 
