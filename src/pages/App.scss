@@ -1,0 +1,135 @@
+// Define variables
+$primary-color: #6361fb;
+$error-color: red;
+$background-color: #282c34;
+$text-color: white;
+$input-border: 1px solid #ccc;
+$common-padding-margin: 1rem;
+$common-border-radius: 0.5rem;
+$common-width: 80%;
+
+.App {
+  text-align: center;
+
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+
+  .App-header {
+    background-color: $background-color;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: $text-color;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: $common-padding-margin;
+
+  .error-message {
+    font-size: 1rem;
+    color: $error-color;
+  }
+
+  input {
+    margin: $common-padding-margin;
+    padding: $common-padding-margin;
+    border-radius: $common-border-radius;
+    border: $input-border;
+    width: $common-width;
+    font-size: 1rem;
+  }
+
+  .submit-button {
+    margin: $common-padding-margin;
+    padding: $common-padding-margin;
+    border-radius: $common-border-radius;
+    border: $input-border;
+    width: $common-width;
+    font-size: 1rem;
+    background-color: $primary-color;
+    color: $text-color;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: $common-padding-margin;
+
+  .task-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: $common-padding-margin;
+    padding: $common-padding-margin;
+    border-radius: $common-border-radius;
+    border: $input-border;
+    width: $common-width;
+    font-size: 1rem;
+    color: $text-color;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+
+    .task-list-item-button-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 70px;
+      position: relative;
+
+      .task-list-item-delete-button, .task-list-item-update-button {
+        border: none;
+        border-radius: $common-border-radius;
+        padding: $common-padding-margin;
+        color: $text-color;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .task-list-item-delete-button {
+        background-color: #ff0000;
+      }
+
+      .task-list-item-update-button {
+        background-color: $primary-color;
+      }
+    }
+  }
+}
