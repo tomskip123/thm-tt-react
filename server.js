@@ -7,6 +7,8 @@ const path = require("path");
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 
+const PORT = process.env.PORT || 5000;
+
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
@@ -28,6 +30,6 @@ app.use(
 );
 
 // start express server on port 5000
-app.listen(80, () => {
-  console.log("server started on port 80");
+app.listen(PORT, () => {
+  console.log(`server started on port ${PORT}`);
 });
