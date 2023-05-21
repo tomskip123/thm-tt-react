@@ -26,7 +26,7 @@ function Home() {
   // It creates a new WebSocket connection to the specified server 
   // and stores it in the state variable 'ws' for later use.
   useEffect(() => {
-    let websocket = new WebSocket('ws://localhost:3001');
+    let websocket = new WebSocket('ws://thm-tt-node.herokuapp.com/');
     setWs(websocket);
   }, []);
 
@@ -98,7 +98,7 @@ function Home() {
       return;
     }
     try {
-      await axios.get('/validate', {
+      await axios.get('/api/validate', {
         headers: {
           'x-access-token': localToken,
         },
@@ -169,7 +169,7 @@ function Home() {
             }}
             onSubmit={async (values, { setSubmitting, setFieldValue }) => {
               try {
-                const res = await axios.post('/login', values);
+                const res = await axios.post('/api/login', values);
                 localStorage.setItem('token', res.data.token);
                 setToken(res.data.token);
                 setFieldValue('password', ''); // Clear password field

@@ -8,7 +8,7 @@ import axios from 'axios';
  */
 export async function getTasks(token: string) {
   try {
-    const res = await axios.get('/tasks', {
+    const res = await axios.get('/api/tasks', {
       headers: {
         'x-access-token': token,
       },
@@ -29,7 +29,7 @@ export async function getTasks(token: string) {
  */
 export async function deleteTask(token: string, id: string) {
   try {
-    await axios.delete(`/tasks/${id}`, {
+    await axios.delete(`/api/tasks/${id}`, {
       headers: {
         'x-access-token': token,
       },
@@ -50,7 +50,7 @@ export async function deleteTask(token: string, id: string) {
  */
 export async function addTask(token: string, values: any) {
   try {
-    const res = await axios.post('/tasks', values, {
+    const res = await axios.post('/api/tasks', values, {
       headers: {
         'x-access-token': token,
       },
@@ -72,7 +72,7 @@ export async function addTask(token: string, values: any) {
 export async function updateTask(token: string, values: any) {
   try {
     const { _id, ...task } = values;
-    const result = await axios.put(`/tasks/${_id}`, task, {
+    const result = await axios.put(`/api/tasks/${_id}`, task, {
       headers: {
         'x-access-token': token,
       },

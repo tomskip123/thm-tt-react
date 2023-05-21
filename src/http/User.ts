@@ -8,7 +8,7 @@ import axios from 'axios';
  */
 export async function getUsers(token: string) {
   try {
-    const res = await axios.get('/users', {
+    const res = await axios.get('/api/users', {
       headers: {
         'x-access-token': token,
       },
