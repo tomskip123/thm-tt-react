@@ -26,9 +26,11 @@ function Home() {
   // It creates a new WebSocket connection to the specified server 
   // and stores it in the state variable 'ws' for later use.
   useEffect(() => {
-    let websocket = new WebSocket('ws://thm-tt-node.herokuapp.com/');
-    setWs(websocket);
-  }, []);
+    if (token) {
+      let websocket = new WebSocket('wss://thm-tt-node.herokuapp.com/');
+      setWs(websocket);
+    }
+  }, [token]);
 
   // This effect hook runs every time 'ws' (the WebSocket instance) changes.
   // It sets up event handlers for the 'open', 'message', 'error', and 'close' events.
