@@ -10,18 +10,81 @@ import { Formik } from 'formik';
 import React, { useEffect } from 'react';
 import './App.scss';
 import { addTask, deleteTask, getTasks, updateTask } from '../http/Task';
+import { getUsers } from '../http/User';
+
 
 function Home() {
   // Use string | null for token and editing. Initialize as null.
   const [token, setToken] = React.useState<string | null>(null);
   const [tasks, setTasks] = React.useState<any[]>([]);
   const [editing, setEditing] = React.useState<string | null>(null);
+  const [users, setUsers] = React.useState<any[]>([]);
+  const [ws, setWs] = React.useState<any>(null);
+
+
+  // This effect hook runs once when the component is mounted.
+  // It creates a new WebSocket connection to the specified server 
+  // and stores it in the state variable 'ws' for later use.
+  useEffect(() => {
+    let websocket = new WebSocket('ws://localhost:3001');
+    setWs(websocket);
+  }, []);
+
+  // This effect hook runs every time 'ws' (the WebSocket instance) changes.
+  // It sets up event handlers for the 'open', 'message', 'error', and 'close' events.
+  useEffect(() => {
+
+    // If 'ws' is not null (i.e., a WebSocket connection has been established)
+    if (ws) {
+
+      // This function is called when the WebSocket connection is successfully established
+      ws.onopen = () => {
+        console.log('Connected to WS server');
+      };
+
+      // This function is called every time a message is received from the WebSocket server
+      ws.onmessage = handleWsMessage
+
+      // This function is called if an error occurs on the WebSocket
+      ws.onerror = (e: any) => {
+        console.error('WebSocket error:', e);
+      };
+
+      // This function is called when the WebSocket connection is closed
+      ws.onclose = (e: any) => {
+        console.log('WebSocket connection closed');
+      };
+    }
+
+    // The return function of a useEffect hook is called when the component unmounts.
+    // Here, we're making sure to close the WebSocket connection when that happens.
+    return () => {
+      if (ws) ws.close();
+    };
+  }, [ws]); // 'ws' is a dependency of this effect hook, so it will run every time 'ws' changes.
+
+  async function handleWsMessage(e: any) {
+    // Handle incoming messages here
+    // 'e.data' contains the data sent from the server.
+    // Here we assume it's a JSON string, which we parse into a JavaScript object.
+    const data = JSON.parse(e.data);
+
+    console.log(data);
+
+    if (token) {
+      const tasks = await getTasks(token);
+      setTasks(tasks);
+    }
+
+  }
+
 
   // Fetch tasks only when token changes.
   useEffect(() => {
     (async () => {
       await checkAuth();
       if (token) {
+        setUsers(await getUsers(token));
         setTasks(await getTasks(token));
       }
     })();
@@ -151,6 +214,14 @@ function Home() {
       editable: true,
     },
     {
+      field: 'assignee',
+      headerName: 'Assignee',
+      width: 300,
+      type: 'singleSelect',
+      valueOptions: users.map((user: any) => user.email),
+      editable: true,
+    },
+    {
       field: 'actions',
       headerName: "Actions",
       renderCell: (params: GridCellParams) => (
@@ -227,7 +298,7 @@ function Home() {
       {tasks && (
         <DataGrid
           style={{ width: '100%', height: 500 }}
-          rows={tasks?.map((task: any) => ({ ...task, id: task._id }))}
+          rows={tasks?.map((task: any) => ({ ...task, id: task._id, status: task.status || '', priority: task.priority || 'low', assignee: task.assignee || '' })).reverse()}
           columns={columns}
           processRowUpdate={async (newRow: any) => {
             const updatedRow = { ...newRow, isNew: false };
