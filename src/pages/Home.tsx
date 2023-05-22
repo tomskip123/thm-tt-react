@@ -227,7 +227,7 @@ function Home() {
       field: 'actions',
       headerName: "Actions",
       renderCell: (params: GridCellParams) => (
-        <Button onClick={handleDelete}>
+        <Button onClick={(e) => handleDelete(params.id)}>
           <Delete style={{ color: "red" }}></Delete>
         </Button>
       ),
